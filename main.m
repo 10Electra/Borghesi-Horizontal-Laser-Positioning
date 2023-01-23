@@ -1,6 +1,11 @@
+%% 
 filePath = "C:\Users\cqh27498\Downloads\Atomic Precision Mount Tests\";
 fileName = "18um laser machined foil (filtered).obj";
+left_foil_bound = 763;
+right_foil_bound = 2755;
+search_width = 5;
 
+%%
 if ~isfile("reformat3dworkspace.mat")
     disp('Saved workspace file not found; loading data afresh')
     Reformat3D(filePath,fileName);
@@ -30,14 +35,9 @@ umPerPixelY = 1e+6 * y_range / img_height;
 clear x y x_range y_range xMin xMax yMin yMax
 
 %%
-left_foil_bound = 763;
-right_foil_bound = 2755;
-
 foil_centre = (left_foil_bound + right_foil_bound) / 2;
 left_third_bound = 1/3 * (right_foil_bound-left_foil_bound) + left_foil_bound;
 right_third_bound = 2/3 * (right_foil_bound-left_foil_bound) + left_foil_bound;
-
-search_width = 5;
 
 l = left_third_bound;
 r = left_third_bound + 3;
