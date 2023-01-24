@@ -1,9 +1,9 @@
-%% 
+%%
 filePath = "C:\Users\cqh27498\Downloads\Atomic Precision Mount Tests\";
-fileName = "18um laser machined foil (filtered).obj";
+fileName = "ascii_file_test.asc";
 left_foil_bound = 763;
 right_foil_bound = 2755;
-search_width = 5;
+search_width_um = 20;
 
 %%
 if ~isfile("reformat3dworkspace.mat")
@@ -20,42 +20,55 @@ else
     end
     clear fileNameParam
 end
-load('reformat3dworkspace','table1','table2','img_height','img_width')
+load('reformat3dworkspace','x','y','z','table2','img_height','img_width')
 disp('Finished loading data')
 
 %%
-x = table1(:,1); y = table1(:,2);
 
-[xMin,xMax] = bounds(x); x_range = xMax-xMin;
-[yMin,yMax] = bounds(y); y_range = yMax-yMin;
+[xMin,xMax] = bounds(x);
+x_range = xMax-xMin;
+[yMin,yMax] = bounds(y);
+y_range = yMax-yMin;
 
 umPerPixelX = 1e+6 * x_range / img_width; % Would be good to check this with the interferometer
-umPerPixelY = 1e+6 * y_range / img_height;
+umPerPixelY = 1e+6 * y_range / img_height; % Not sure if this still works...
 
-clear x y x_range y_range xMin xMax yMin yMax
+clear x_range y_range xMin xMax yMin yMax
 
 %%
+search_width_px = round(search_width_um/umPerPixelX)
+
 foil_centre = (left_foil_bound + right_foil_bound) / 2;
 left_third_bound = 1/3 * (right_foil_bound-left_foil_bound) + left_foil_bound;
 right_third_bound = 2/3 * (right_foil_bound-left_foil_bound) + left_foil_bound;
 
+%% 
+disp('running')
+for xi = left_third_bound:right_third_bound
+    scatter(1:height(table2),table2(:,xi),'filled')
+    ylim([0 250])
+    xlim([400 650])
+    title(xi)
+    waitforbuttonpress
+    clf
+end
+
+%% 
 l = left_third_bound;
-r = left_third_bound + 3;
 lsf = inf;
 bsf = NaN;
-while r <= right_third_bound
+while l + search_width_px <= right_third_bound
     total = 0;
-    for i = 1:search_width
-        [col_min,col_max] = bounds(table1(1,:));
-        total = total + (col_max-col_min);
+    for i = 0:search_width_px
+        [col_min,col_max] = bounds(table2(:,l+i));
+        total = total + (col_max - col_min);
     end
     avg = total / height(table1);
     if lsf > avg
         lsf = avg;
-        bsf = (l+r)/2;
+        bsf = l+search_width_px/2;
     end
     l=l+1;
-    r=r+1;
 end
 clear left_third_bound right_third_bound i col_min col_max total l r
 
@@ -69,7 +82,6 @@ else
 end
 dist_px = abs(foil_centre-bsf);
 dist_um = dist_px * umPerPixelX;
-disp(dist_um)
 
 %%
 n = 10;

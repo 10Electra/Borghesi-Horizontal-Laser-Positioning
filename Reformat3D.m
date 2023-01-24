@@ -4,21 +4,25 @@ function Reformat3D(filePathParam,fileNameParam)
 %   the number of data points in the original file. Table 2 is a p*q table,
 %   where p and q are the y and x dimensions of the rectangular data.
 fullPath = strcat(filePathParam,fileNameParam);
-table1 = importdata(fullPath);
+fid = fopen(fullPath, 'rt');
+C = textscan(fid, '%f%f%f', 'Delimiter',' ', 'HeaderLines', 10);
+x = C{1};
+y = C{2};
+z = C{3};
+fclose(fid);
 
 %   Finding the dimensions of the interferometer image
 i = 1;
-while table1(i+1,2) == table1(i,2)
+while x(i+1) == x(i)
     i = i + 1;
 end
 img_width = i;
-img_height = height(table1)/img_width;
+img_height = height(x)/img_width;
 
 %   Create table2 with dimensions img_height,img_width
-zValues = table1(:,3);
 table2 = zeros(img_height,img_width);
 for i = 1:img_height
-    table2(i,:) = zValues(img_width*(i-1)+1:img_width*i)';
+    table2(i,:) = z(img_width*(i-1)+1:img_width*i)';
 end
 save reformat3dworkspace.mat
 end
