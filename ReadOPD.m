@@ -23,6 +23,7 @@ function [array,wavelength,aspect,pxlsize] = ReadOPD(filename,badpixelvalue,scal
 %           readopdBPF -- to read opd file and leave BPF values
 
 % $Revision: 1.10 $ Last Modified July 2010
+% [Then modified Jan 2023 by Christopher Gardner CLF]
 % Copyright (c) 2001-2010 Bruker Instruments Inc. All Rights Reserved.
 
 % BRUKER MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THIS SOFTWARE 
