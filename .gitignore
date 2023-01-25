@@ -1,6 +1,6 @@
 *.txt
 *.asc
 **test**
-ReadOPD.m
+ReadOPD*.m
 *.mat
 *.asv
