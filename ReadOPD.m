@@ -1,4 +1,4 @@
-function [fid,array,wavelength,aspect,pxlsize] = ReadOPD(filename,badpixelvalue,scaleByWavelength)
+function [array,wavelength,aspect,pxlsize] = ReadOPD(filename,badpixelvalue,scaleByWavelength)
 %READOPD Reads WYKO OPD file 
 %
 % [array,wavelength,aspect,pxlsize] = READOPD(filename,badpixelvalue,scaleByWavelength)
