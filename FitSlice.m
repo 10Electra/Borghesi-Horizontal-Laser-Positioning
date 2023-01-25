@@ -9,4 +9,3 @@ xfit = rmmissing(x);
 yfit = rmmissing(y);
 fitobj = fit(xfit,yfit,fittype);
 end
-
