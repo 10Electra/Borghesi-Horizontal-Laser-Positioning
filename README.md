@@ -29,6 +29,14 @@ The 'warp indicator' is either:
  - ```m```, the gradient of the best fit line in the ```y```-axis
  - ```r```, the range (max - min) of the array slice's values
 
+## More Information
+The conversion from the interferometer .OPD file to a readable MATLAB matrix seems to corrupt the height data. A scaling and translational effect is produced, which depends on the scan's settings (e.g. magnification, field of view).
+
+This algorithm only needs relative height data for finding the least warped section, but if absolute height values are required, the MATLAB array can be easily modified to fit the original data.
+
+Below is an example of the original BRUKER interferometer scan.
+
+![BRUKER Original Scan](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Original%20Scan%20Bruker.png?raw=true)
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
