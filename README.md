@@ -5,7 +5,11 @@ A MATLAB project to assist in the Borghesi-1022 experiment with aiming the laser
 
 ## Installation
 
-Clone this repository into a local directory!
+Either:
+ - Clone this repository into a local directory
+or
+ - Download the .zip file and open it locally
+![ZIP Instructions](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/ZIP%20Instructions.png?raw=true)
 
 ## Usage
 
