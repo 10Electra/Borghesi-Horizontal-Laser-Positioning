@@ -16,12 +16,14 @@ or
 
 - Run the ``` main.m``` script
 - Edit the following variables to fit the current data
-  - ```filePath```,
-  - ```fileName```,
-  - ```left_foil_bound```,
-  - ```right_foil_bound``` and
+  - ```filePath```
+  - ```fileName```
+  - ```left_foil_bound```, the location of the left edge of the foil (in data rows) on the x-axis
+  - ```right_foil_bound```, the location of the right edge of the foil (in data rows) on the x-axis
   - ```approx_beam_width_um```
-- On line 61 replace ```r(i+k)``` with ```m(i+k)``` to change the warp indicator
+  - ```realMinZ```, the minimum height value in the original scan in um
+  - ```realMaxZ```, the maximum height value in the original scan in um
+- On line 62 replace ```r(i+k)``` with ```m(i+k)``` to change the warp indicator (explained below)
 
 ## A More Detailed Explanation
 ![3D Graph Example](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Example%203D%20Graph%20Annotated.png?raw=true)
