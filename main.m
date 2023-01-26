@@ -1,14 +1,18 @@
 filePath = 'C:\Users\cqh27498\Downloads\Atomic Precision Mount Tests\';
-fileName = '18um Al 5x mag, 0.55FOV.OPD'; 
+% fileName = '18um Al 5x mag, 0.55FOV.OPD';
+fileName = '25um Al, 300um wide.OPD';
 left_foil_bound = 140;
 right_foil_bound = 1090;
 approx_beam_width_um = 10;
+realMinZ = -6.744;
+realMaxZ = 10.302;
 
 %% 
 fullPath = strcat(filePath,fileName);
 [array,wavelength,aspect,pxlsize] = ReadOPD(fullPath);
-array = (array / 13.027) + 8.222;
-clear filePath fileName fullPath
+% array = (array / 13.027) + 8.222;
+array = RecalibrateZ(array, realMinZ, realMaxZ);
+clear filePath fileName fullPath realMinZ realMaxZ
 
 %% 
 approx_beam_width_px = round(approx_beam_width_um/(pxlsize*1000)); % Need to work out scaling.
@@ -20,9 +24,6 @@ right_third_bound = round(2/3 * (right_foil_bound-left_foil_bound) + left_foil_b
 total_search_width_px = right_third_bound-left_third_bound;
 
 %%
-% fitobj = FitSlice(array,460,'poly1');
-% disp(fitobj.p1)
-
 % for xi = left_third_bound:right_third_bound
 %     y = array(:,xi);
 %     x = linspace(1,height(array),height(array))';
@@ -32,14 +33,14 @@ total_search_width_px = right_third_bound-left_third_bound;
 %     scatter(xfit,yfit,'filled')
 % %     hold on
 % %     fitobj = fit(xfit,yfit,'poly2');
-% %     plot(fitobj)
+% %   plot(fitobj)
 % %     fitobj2 = fit(xfit,yfit,'poly1');
 % %     plot(fitobj2)
 %     title(xi)
 %     waitforbuttonpress
 %     clf
 % end
-
+% clear x y xfit yfit xi
 %% 
 m = zeros(total_search_width_px,1);
 r = zeros(total_search_width_px,1);
@@ -67,7 +68,7 @@ while i + approx_beam_width_px <= total_search_width_px
     end
     i=i+1;
 end
-clear i j col_min col_max total
+clear i j k m r minCol maxCol total fitobj avg
 
 %% 
 sprintf(['The middle column of the %d column wide least warped section' ...
@@ -81,15 +82,15 @@ hold on
 plot3([left_third_bound,left_third_bound],[0,height(array)],[0,0],'b')
 plot3([right_third_bound,right_third_bound],[0,height(array)],[0,0],'b')
 surf(array,EdgeColor="none")
-daspect([8,8,1])
-ylim([350 550])
-xlim([0 1200])
+daspect([6,6,1])
+% daspect([1,1,1])
+ylim([350 600])
+% xlim([0 1200])
 hold off
 
-% %%
+%%
 % figure(2)
-% fitobj = FitSlice(array,bsf,'poly1');
-% plot(fitobj)
+% plot(FitSlice(array,bsf,'poly1'))
 % hold on
 % y = array(:,bsf);
 % x = linspace(1,height(array),height(array))';
@@ -98,3 +99,4 @@ hold off
 % yfit = rmmissing(y);
 % scatter(xfit,yfit,'filled')
 % hold off
+% clear x y xfit yfit
