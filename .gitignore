@@ -1,5 +1,6 @@
 *.txt
 *.asc
-**test**
 *.mat
 *.asv
+misc/*
+ASCII version/*
