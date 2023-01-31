@@ -25,6 +25,10 @@ or
   - ```realMaxZ```, the maximum height value in the original scan in um
 - On line 62 replace ```r(i+k)``` with ```m(i+k)``` to change the warp indicator (explained below)
 
+The ```filePath``` depends on where you store the repository locally. The ```left_foil_bound``` and ```right_foil_bound``` have to be calculated and entered manually as the ends of the foil are sometimes vague or subjective.
+
+The values for ```fileName```, ```realMinZ``` and ```realMaxZ``` can be found in the repository's excel worksheet. Each row corresponds to a different foil and its data. Other information including surface roughness can also be found in the corresponding row.
+
 ## A More Detailed Explanation
 ![3D Graph Example](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Example%203D%20Graph%20Annotated.png?raw=true)
 
