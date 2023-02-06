@@ -9,19 +9,11 @@ right_foil_bound = 1090;
 % Defines the search width
 approx_beam_width_um = 10;
 
-% Put the original data's vertical bounds here in μm for absolute heights.
-% Comment these out if absolute heights aren't needed
-realMinZ = -6.744;
-realMaxZ = 10.302;
-
 %% Reads the .OPD file and correctly scales it if necessary
 fullPath = strcat(filePath,fileName);
 [array,wavelength,aspect,pxlsize] = ReadOPD(fullPath);
 
- % Comment this out if absolute heights not needed
-array = RecalibrateZ(array, realMinZ, realMaxZ);
-
-clear filePath fileName fullPath realMinZ realMaxZ
+clear filePath fileName fullPath
 
 %% Calculate total search bounds and search width
 approx_beam_width_px = round(approx_beam_width_um/(pxlsize*1000));
@@ -93,4 +85,4 @@ hold on
 plot3([left_third_bound,left_third_bound],[0,height(array)],[0,0],'b')
 plot3([right_third_bound,right_third_bound],[0,height(array)],[0,0],'b')
 surf(array,EdgeColor="none")
-daspect([6,6,1])
+daspect([5,6,1])
