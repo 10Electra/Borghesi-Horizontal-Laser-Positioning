@@ -1,6 +1,6 @@
 %% Have to supply the script with this information
 filePath = 'C:\Users\cqh27498\OneDrive - Science and Technology Facilities Council\Coding files\MATLAB\Borghesi Horizontal Laser Positioning\Characterisation Data\Data\';
-fileName = '1C2 - No filtering 20x,0.55.OPD';
+fileName = '1C4 - Stitch - With filtering 20x,0.55.OPD';
 
 % Bounds of the foil in terms of data columns
 left_foil_bound = 176;
@@ -31,55 +31,55 @@ total_search_width_px = right_third_bound-left_third_bound;
 % Useful for viewing the data and testing new 'warp indicator' functions
 
 % for xi = left_third_bound:right_third_bound
+%     [p, R2] = FitSlice(array,xi,1);
 %     y = array(:,xi);
 %     x = linspace(1,height(array),height(array))';
 %     x(isnan(y)) = NaN;
-%     xfit = rmmissing(x);
-%     yfit = rmmissing(y);
-%     scatter(xfit,yfit,'filled')
-%     title(xi)
+%     x = rmmissing(x);
+%     y = rmmissing(y);
+%     plot(x,y)
+%     hold on
+%     plot(x,polyval(p,x))
+%     title([p(1),R2])
 %     waitforbuttonpress
 %     clf
 % end
-% clear x y xfit yfit xi
+
 
 %% Calculates 'warp indicator' arrays for use later
-m = zeros(total_search_width_px,1); % Gradients of best fit lines
-r = zeros(total_search_width_px,1); % (Max - min) values
+m = zeros(total_search_width_px,1); % Gradient array
+r2 = zeros(total_search_width_px,1); % Coefficients of determination array
 for i=1:total_search_width_px
     j = i-1 + left_third_bound;
-    fitobj = FitSlice(array,j,'poly1');
-    [minCol,maxCol] = bounds(array(:,j));
-    r(i) = maxCol-minCol;
-    m(i) = fitobj.p1;
+    [p, R2] = FitSlice(array,j);
+    r2(i) = R2;
+    m(i) = p(1);
 end
 
 %% Finding the least warped section of the foil
 i = 0;
-lowest = inf; % Lowest warp indicator average so far
+highest = 0; % highest warp indicator average so far
 best = NaN; % best location to shoot the laser so far
 while i + approx_beam_width_px <= total_search_width_px
     j = i + left_third_bound;
     total = 0;
     for k = 1:approx_beam_width_px
-        total = total + r(i+k);
+        total = total + r2(i+k);
     end
     avg = total / approx_beam_width_px;
-    if lowest > avg
-        lowest = avg;
+    if avg > highest
+        highest = avg;
         best = j+approx_beam_width_px/2; % 0.5 less than actual value
     end
     i=i+1;
 end
-clear i j k m r minCol maxCol total fitobj avg
+clear i j k r minCol maxCol total avg
 
 %% Text outputs to command window
 sprintf(['The middle column of the %d column wide least warped section' ...
     ' is %d'],[approx_beam_width_px,best])
-sprintf('The average gradient of this section is %d', ...
-    lowest*pxlsize)
-sprintf('The range of the middle column in this section is %d microns', ...
-    max(array(:,best))-min(array(:,best)))
+sprintf('The average R^2 value of this section is %d', ...
+    highest)
 
 %% Plotting
 figure(1)
