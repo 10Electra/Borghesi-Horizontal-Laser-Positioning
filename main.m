@@ -1,10 +1,10 @@
 %% Have to supply the script with this information
-filePath = 'C:\Users\cqh27498\Downloads\Atomic Precision Mount Tests\';
-fileName = '18um Al 5x mag, 0.55FOV.OPD';
+filePath = 'C:\Users\cqh27498\OneDrive - Science and Technology Facilities Council\Coding files\MATLAB\Borghesi Horizontal Laser Positioning\Characterisation Data\Data\';
+fileName = '1C2 - No filtering 20x,0.55.OPD';
 
 % Bounds of the foil in terms of data columns
-left_foil_bound = 140;
-right_foil_bound = 1090;
+left_foil_bound = 176;
+right_foil_bound = 4049;
 
 % Defines the search width
 approx_beam_width_um = 10;
@@ -12,6 +12,9 @@ approx_beam_width_um = 10;
 %% Reads the .OPD file and correctly scales it if necessary
 fullPath = strcat(filePath,fileName);
 [array,wavelength,aspect,pxlsize] = ReadOPD(fullPath);
+arrayMax = max(max(array));
+arrayMin = min(min(array));
+arrayRange = arrayMax - arrayMin;
 
 clear filePath fileName fullPath
 
@@ -80,9 +83,9 @@ sprintf('The range of the middle column in this section is %d microns', ...
 
 %% Plotting
 figure(1)
-plot3([best,best],[0,height(array)],[0,0],'r')
+plot3([best,best],[0,height(array)],[arrayMax,arrayMax],'r')
 hold on
-plot3([left_third_bound,left_third_bound],[0,height(array)],[0,0],'b')
-plot3([right_third_bound,right_third_bound],[0,height(array)],[0,0],'b')
+plot3([left_third_bound,left_third_bound],[0,height(array)],[arrayMax,arrayMax],'b')
+plot3([right_third_bound,right_third_bound],[0,height(array)],[arrayMax,arrayMax],'b')
 surf(array,EdgeColor="none")
-daspect([5,6,1])
+daspect([1,1,0.2])
