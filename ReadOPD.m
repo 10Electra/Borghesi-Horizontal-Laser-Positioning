@@ -22,8 +22,8 @@ function [array,wavelength,aspect,pxlsize] = ReadOPD(filename,badpixelvalue,scal
 % SEE ALSO: ReadValueopd -- to read specific value from the opd file
 %           readopdBPF -- to read opd file and leave BPF values
 
-% $Revision: 1.10 $ Last Modified July 2010
-% [Then modified Jan 2023 by Christopher Gardner CLF]
+% $Revision: 1.10 $ Last Modified July 2010 by BRUKER
+% $Revision: N/A $ Last Modified February 2023 by Christopher Gardner CLF
 % Copyright (c) 2001-2010 Bruker Instruments Inc. All Rights Reserved.
 
 % BRUKER MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THIS SOFTWARE 
@@ -35,9 +35,9 @@ function [array,wavelength,aspect,pxlsize] = ReadOPD(filename,badpixelvalue,scal
 % check number of input parameters
 if ( nargin == 1 )
   badpixelvalue = NaN;
-  scaleByWavelength = 0;
+  scaleByWavelength = 1;
 elseif (nargin == 2)
-  scaleByWavelength = 0;
+  scaleByWavelength = 1;
 elseif (nargin ~= 3)
   error ('Wrong number of input parameters, use HELP READOPD');
 end
@@ -222,6 +222,9 @@ try
     array = flip(arrayTmp,1);
   end
   % close the file
+  if scaleByWavelength == 1
+      array = array / 1000; % Output array in microns
+  end
   fclose(fid);
 catch 
   if fid >= 0
