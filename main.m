@@ -27,25 +27,6 @@ left_third_bound = round(1/3 * (right_foil_bound-left_foil_bound) + left_foil_bo
 right_third_bound = round(2/3 * (right_foil_bound-left_foil_bound) + left_foil_bound);
 total_search_width_px = right_third_bound-left_third_bound;
 
-%% Goes through data column slices and plots them
-% Useful for viewing the data and testing new 'warp indicator' functions
-
-% for xi = left_third_bound:right_third_bound
-%     [p, R2] = FitSlice(array,xi,1);
-%     y = array(:,xi);
-%     x = linspace(1,height(array),height(array))';
-%     x(isnan(y)) = NaN;
-%     x = rmmissing(x);
-%     y = rmmissing(y);
-%     plot(x,y)
-%     hold on
-%     plot(x,polyval(p,x))
-%     title([p(1),R2])
-%     waitforbuttonpress
-%     clf
-% end
-
-
 %% Calculates 'warp indicator' arrays for use later
 m = zeros(total_search_width_px,1); % Gradient array
 r2 = zeros(total_search_width_px,1); % Coefficients of determination array
@@ -74,6 +55,23 @@ while i + approx_beam_width_px <= total_search_width_px
     i=i+1;
 end
 clear i j k r minCol maxCol total avg
+
+%% Plot to check whether the foil is twisted at the chosen section
+for xi=best-approx_beam_width_px/2:best+approx_beam_width_px/2
+    [p, R2] = FitSlice(array,xi);
+    y = array(:,xi);
+    x = linspace(1,height(array),height(array))';
+    x(isnan(y)) = NaN;
+    x = rmmissing(x);
+    y = rmmissing(y);
+    plot(x,y)
+    hold on
+    plot(x,polyval(p,x))
+    title([p(1),R2])
+    waitforbuttonpress
+    clf
+    hold off
+end
 
 %% Text outputs to command window
 sprintf(['The middle column of the %d column wide least warped section' ...
