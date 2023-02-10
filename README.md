@@ -55,7 +55,7 @@ An indicator of the flat twist of the foil in a certain section is the standard 
 
 The relative flatness and flat twist indicators can be combined in a weighted sum to form a new warp indicator.
 
-__This warp indicator is available on the *dev* branch__
+The ___dev___ branch contains an implementation of the relative flatness _warp indicator_. Instead of using a flat twist indicator, the current implementation on ___dev___ plots a graph of all of the slices in the chosen least warped section so the user can check for flat twist.
 
 ## Bugfixes
 
