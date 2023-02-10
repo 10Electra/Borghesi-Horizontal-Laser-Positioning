@@ -1,6 +1,11 @@
 # Borghesi-Horizontal-Laser-Positioning
 
-![3D-Graph-Example](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Example%203D%20Graph%202.png?raw=true)
+<img src="https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Example%203D%20Graph%202.png?raw=true"
+alt="3D Graph Example"
+style="display: block; 
+          margin-left: auto;
+          margin-right: auto;
+          width: 50%;">
 
 A MATLAB project to assist in the Borghesi-1022 experiment with aiming the laser at the least warped section of each target foil.
 ## Installation
