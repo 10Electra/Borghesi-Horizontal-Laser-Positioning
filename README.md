@@ -26,8 +26,6 @@ In the __Finding the least warped section of the foil__ section (around line 65)
 
 The ```filePath``` depends on where you store the repository locally. The ```left_foil_bound``` and ```right_foil_bound``` have to be calculated and entered manually as the ends of the foil are sometimes vague or subjective.
 
-Various metrics such as dimensions, material, and surface roughness can be found in the ___Array Target Characterisation.xlsx___ spreadsheet. Each row corresponds to a different target.
-
 <figure>
 <img
   src="https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Mount%20Diagram.png?raw=true"
@@ -35,9 +33,12 @@ Various metrics such as dimensions, material, and surface roughness can be found
   style="display: block; 
           margin-left: auto;
           margin-right: auto;
-          width: 65%;">
+          width: 45%;">
 <figcaption align = "center"><b>Naming convention of foil data files</b></figcaption>
 </figure>
+
+
+Various metrics such as dimensions, material, and surface roughness can be found in the ___Array Target Characterisation.xlsx___ spreadsheet. Each row corresponds to a different target.
 
 ## A More Detailed Explanation
 ![3D Graph Example](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Example%203D%20Graph%20Annotated.png?raw=true)
