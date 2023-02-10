@@ -1,8 +1,8 @@
 # Borghesi-Horizontal-Laser-Positioning
-A MATLAB project to assist in the Borghesi-1022 experiment with aiming the laser at the least warped section of each target foil.
 
 ![3D-Graph-Example](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Example%203D%20Graph%202.png?raw=true)
 
+A MATLAB project to assist in the Borghesi-1022 experiment with aiming the laser at the least warped section of each target foil.
 ## Installation
 
 Either:
@@ -21,33 +21,47 @@ or
   - ```left_foil_bound```, the location of the left edge of the foil (in data rows) on the x-axis
   - ```right_foil_bound```, the location of the right edge of the foil (in data rows) on the x-axis
   - ```approx_beam_width_um```
-  - ```realMinZ```, the minimum height value in the original scan in um
-  - ```realMaxZ```, the maximum height value in the original scan in um
-- On line 62 replace ```r(i+k)``` with ```m(i+k)``` to change the warp indicator (explained below)
+
+In the __Finding the least warped section of the foil__ section (around line 65), you can replace the _warp indicator_ ```r(i+k)``` with another of your choice. The _warp indicator_ array that is indexed here is calculated earlier in the script (around line 46).
 
 The ```filePath``` depends on where you store the repository locally. The ```left_foil_bound``` and ```right_foil_bound``` have to be calculated and entered manually as the ends of the foil are sometimes vague or subjective.
 
-The values for ```fileName```, ```realMinZ``` and ```realMaxZ``` can be found in the repository's excel worksheet. Each row corresponds to a different foil and its data. Other information including surface roughness can also be found in the corresponding row.
+Various metrics such as dimensions, material, and surface roughness can be found in the ___Array Target Characterisation.xlsx___ spreadsheet. Each row corresponds to a different target.
 
 ## A More Detailed Explanation
 ![3D Graph Example](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Example%203D%20Graph%20Annotated.png?raw=true)
 
-The algorithm works by searching the middle third of the foil horizontally, and finding the ```n``` adjacent columns of data that have the lowest average 'warp indicator'.
+The algorithm tries to find the least warped section of the foil. It looks only at the middle third of the foil (marked with blue vertical lines in the diagram) whose bounds are calculated from the user-supplied end locations of the foil.
 
-```n``` is calculated from the ```approx_beam_width_um``` value.
+The algorithm's output is the location of the centre of a certain section of the foil that ```n``` data columns wide (```approx_beam_width_um``` microns wide).
 
-The 'warp indicator' is either:
- - ```m```, the gradient of the best fit line in the ```y```-axis
- - ```r```, the range (max - min) of the array slice's values
+This 'certain section' of foil was chosen as it either maximises or minimises the chosen _warp indicator(s)_, measured for each data column (or array slice) in the section and averaged.
 
-## More Information
-The conversion from the interferometer .OPD file to a readable MATLAB matrix seems to corrupt the height data. A scaling and translational effect is produced, which depends on the scan's settings (e.g. magnification, field of view).
+### Simple Warp Indicators
 
-This algorithm only needs relative height data for finding the least warped section, but if absolute height values are required, the MATLAB array can be easily modified to fit the original data.
+The 'warp indicator' could be either:
+ - the gradient of the best fit line in the ```y```-axis
+ - the range (max - min) of the array slice's values
 
-Below is an example of the original BRUKER interferometer scan.
+### Complex Warp Indicator
 
-![BRUKER Original Scan](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Original%20Scan%20Bruker.png?raw=true)
+Recently, it was observed that the angle of the target wheel is able to be adjusted, so we can search for relative flatness, as opposed to absolute angle flatness (e.g. $\theta=0°$ or $m=0$).
+
+This relative flatness can be approximated by the coefficient of determination ($R^2$ value) of the array slice's best fit line.
+
+The only issue with this approach is that the algorithm will not take into account any flat twist (like any section of a Möbius strip). If the approx beam width is not thin, (```n > 1```) this flat twist will be problematic and should be minimised.
+
+An indicator of the flat twist of the foil in a certain section is the standard deviation or variance of the array slices in that section.
+
+The relative flatness and flat twist indicators can be combined in a weighted sum to form a new warp indicator.
+
+## Bugfixes
+
+A bug involving scaling problems for height data between Vision64 and MATLAB has recently been fixed. Originally, the height data MATLAB loaded from the .OPD files was both differently scaled and vertically translated. This issue has been fixed so the data is now correctly scaled automatically. _The vertical scale in MATLAB is in microns_.
+
+| ![Vision64 Original Scan](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20Vision64%20example.png?raw=true)|![Plotted MATLAB Surface](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20MATLAB%20example.png?raw=true)|
+|-----|--------|
+|Example Vision64 original scan|Example corresponding MATLAB surface|
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
