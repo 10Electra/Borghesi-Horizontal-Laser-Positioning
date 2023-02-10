@@ -55,13 +55,16 @@ An indicator of the flat twist of the foil in a certain section is the standard 
 
 The relative flatness and flat twist indicators can be combined in a weighted sum to form a new warp indicator.
 
+__This warp indicator is available on the *dev* branch__
+
 ## Bugfixes
 
 A bug involving scaling problems for height data between Vision64 and MATLAB has recently been fixed. Originally, the height data MATLAB loaded from the .OPD files was both differently scaled and vertically translated. This issue has been fixed so the data is now correctly scaled automatically. _The vertical scale in MATLAB is in microns_.
 
-| ![Vision64 Original Scan](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20Vision64%20example.png?raw=true)|![Plotted MATLAB Surface](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20MATLAB%20example.png?raw=true)|
+| ![Vision64](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20Vision64%20example.png?raw=true)| ![MATLAB](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20MATLAB%20example.png?raw=true)|
 |-----|--------|
-|Example Vision64 original scan|Example corresponding MATLAB surface|
+|Vision64 scan |MATLAB surface|
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
