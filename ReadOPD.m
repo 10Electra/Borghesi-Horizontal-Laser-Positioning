@@ -17,7 +17,7 @@ function [array,wavelength,aspect,pxlsize] = ReadOPD(filename,badpixelvalue,scal
 % raw - raw data array
 % wavelength - in nanometers
 % aspect - aspect ratio of the data set
-% pxlsize - pixel size in x direction
+% pxlsize - microns per pixel in x direction
 % 
 % SEE ALSO: ReadValueopd -- to read specific value from the opd file
 %           readopdBPF -- to read opd file and leave BPF values
@@ -164,6 +164,7 @@ try
         
       case 'Pixel_size'
         pxlsize=fread(fid,1,'float');
+        pxlsize = pxlsize * 1000; % convert from mm/pxl to um/pxl
         
       otherwise
         % use conversion depending on the data type 
@@ -210,7 +211,8 @@ try
       % create our array
       array = ones(cols1, rows1) * badpixelvalue;
       for i=1:rows1
-        col = flip(fread(fid, [cols1,1], prec1),1);
+%         col = flip(fread(fid, [cols1,1], prec1),1);
+        col = fread(fid, [cols1,1], prec1);
         indexGood = find(col < badValue);
         array(indexGood,i) = col(indexGood) * scale;
       end
@@ -219,7 +221,8 @@ try
     indexGood = find(arrayTmp < badValue);
     arrayTmp(indexGood) = arrayTmp(indexGood) * scale;
     arrayTmp(arrayTmp > badValue) = badpixelvalue;
-    array = flip(arrayTmp,1);
+%     array = flip(arrayTmp,1);
+    array = arrayTmp;
   end
   % close the file
   if scaleByWavelength == 1

@@ -1,13 +1,13 @@
 %% Have to supply the script with this information
-filePath = 'C:\Users\cqh27498\OneDrive - Science and Technology Facilities Council\Coding files\MATLAB\Borghesi Horizontal Laser Positioning\Characterisation Data\Data\';
-fileName = '1C4 - Stitch - With filtering 20x,0.55.OPD';
+filePath = 'Characterisation Data\Array 3\';
+fileName = '3A2 - stitch - Filtered.OPD';
 
 % Bounds of the foil in terms of data columns
-left_foil_bound = 176;
-right_foil_bound = 4049;
+left_reference = 971;
+right_reference = 3416;
 
 % Defines the search width
-approx_beam_width_um = 10;
+beam_width_um = 10;
 
 %% Reads the .OPD file and correctly scales it if necessary
 fullPath = strcat(filePath,fileName);
@@ -19,12 +19,11 @@ arrayRange = arrayMax - arrayMin;
 clear filePath fileName fullPath
 
 %% Calculate total search bounds and search width
-approx_beam_width_px = round(approx_beam_width_um/(pxlsize*1000));
-sprintf('Search width is %d data point columns',approx_beam_width_px)
+beam_width_px = round(beam_width_um/(pxlsize));
+sprintf('Search width is %d data point columns',beam_width_px)
 
-foil_centre = (left_foil_bound + right_foil_bound) / 2;
-left_third_bound = round(1/3 * (right_foil_bound-left_foil_bound) + left_foil_bound);
-right_third_bound = round(2/3 * (right_foil_bound-left_foil_bound) + left_foil_bound);
+left_third_bound = round(1/3 * (right_reference-left_reference) + left_reference);
+right_third_bound = round(2/3 * (right_reference-left_reference) + left_reference);
 total_search_width_px = right_third_bound-left_third_bound;
 
 %% Calculates 'warp indicator' arrays for use later
@@ -40,44 +39,44 @@ end
 %% Finding the least warped section of the foil
 i = 0;
 highest = 0; % highest warp indicator average so far
-best = NaN; % best location to shoot the laser so far
-while i + approx_beam_width_px <= total_search_width_px
+best_j = 0; % best location to shoot the laser so far
+avg_m_section = 0; % the average gradient of the least warped section
+while i + beam_width_px <= total_search_width_px
     j = i + left_third_bound;
     total = 0;
-    for k = 1:approx_beam_width_px
+    av_m = 0;
+    for k = 1:beam_width_px
         total = total + r2(i+k);
+        av_m = av_m + m(i+k);
     end
-    avg = total / approx_beam_width_px;
+    avg = total / beam_width_px;
+    av_m = av_m / beam_width_px;
     if avg > highest
         highest = avg;
-        best = j+approx_beam_width_px/2; % 0.5 less than actual value
+        best_j = j;
+        avg_m_section = av_m;
     end
     i=i+1;
 end
-clear i j k r minCol maxCol total avg
+avg_m_section = avg_m_section/pxlsize;
+best = best_j+ceil(beam_width_px/2);
+offset_result = best - left_reference;
+% best j = 2486
+clear i j k total avg
 
 %% Plot to check whether the foil is twisted at the chosen section
-for xi=best-approx_beam_width_px/2:best+approx_beam_width_px/2
-    [p, R2] = FitSlice(array,xi);
-    y = array(:,xi);
-    x = linspace(1,height(array),height(array))';
-    x(isnan(y)) = NaN;
-    x = rmmissing(x);
-    y = rmmissing(y);
-    plot(x,y)
-    hold on
-    plot(x,polyval(p,x))
-    title([p(1),R2])
-    waitforbuttonpress
-    clf
-    hold off
-end
+% PlotSlices(array,best_j+1,best_j+beam_width_px)
 
 %% Text outputs to command window
-sprintf(['The middle column of the %d column wide least warped section' ...
-    ' is %d'],[approx_beam_width_px,best])
-sprintf('The average R^2 value of this section is %d', ...
+sprintf(['The %0.1f um wide least warped section is %0.2f microns' ...
+    ' right of the left reference'],beam_width_um,offset_result)
+
+sprintf('The average R^2 value of this section is %0.3f', ...
     highest)
+
+sprintf(['The average gradient of the foil in the chosen' ...
+    ' least warped section is %0.5f, with an angle of %0.5f degrees'], ...
+    avg_m_section,rad2deg(atan(avg_m_section)))
 
 %% Plotting
 figure(1)
