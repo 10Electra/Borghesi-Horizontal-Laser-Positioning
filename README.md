@@ -1,13 +1,8 @@
 # Borghesi-Horizontal-Laser-Positioning
+A MATLAB project to assist the Borghesi-1022 experiment by finding the least warped section of each foil in each Borghesi microtarget array.
 
-<img src="https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Example%203D%20Graph%202.png?raw=true"
-alt="3D Graph Example"
-style="display: block; 
-          margin-left: auto;
-          margin-right: auto;
-          width: 50%;">
+The foils are individually scanned using a white light interferometer normal to the foil. The foil's height map is then saved in the .OPD file format and uploaded to the ___Characterisation Data___ directory of this repository. The file's name, path and approximate foil position can be given to the _main.m_ script, which then uses an algorithm (explained below) to determine the least warped section. A plot of the foil's 3D surface that includes the relevant result annotations can be shown.
 
-A MATLAB project to assist in the Borghesi-1022 experiment with aiming the laser at the least warped section of each target foil.
 ## Installation
 
 Either:
