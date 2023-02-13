@@ -10,21 +10,31 @@ Either:
 
 or
  - Download the .zip file and open it locally
-![ZIP Instructions](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/ZIP%20Instructions.png?raw=true)
+
+<figure>
+<img
+  src="https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/ZIP%20Instructions%20cropped.png?raw=true"
+  alt=".zip instructions"
+  style="display: block; 
+          margin-left: 0px;
+          margin-right: auto;
+          width: 300px;">
+<figcaption align = "left"><b>.zip instructions</b></figcaption>
+</figure>
 
 ## Usage
 
-- Run the ``` main.m``` script
+- Run the ` main.m` script
 - Edit the following variables to fit the current data
-  - ```filePath```
-  - ```fileName```
-  - ```left_foil_bound```, the location of the left edge of the foil (in data rows) on the x-axis
-  - ```right_foil_bound```, the location of the right edge of the foil (in data rows) on the x-axis
-  - ```approx_beam_width_um```
+  - `filePath`
+  - `fileName`
+  - `left_foil_bound`, the location of the left edge of the foil (in data rows) on the x-axis
+  - `right_foil_bound`, the location of the right edge of the foil (in data rows) on the x-axis
+  - `approx_beam_width_um`
 
-In the __Finding the least warped section of the foil__ section (around line 65), you can replace the _warp indicator_ ```r(i+k)``` with another of your choice. The _warp indicator_ array that is indexed here is calculated earlier in the script (around line 46).
+In the __Finding the least warped section of the foil__ section (around line 65), you can replace the _warp indicator_ `r(i+k)` with another of your choice. The _warp indicator_ array that is indexed here is calculated earlier in the script (around line 46).
 
-The ```filePath``` depends on where you store the repository locally. The ```left_foil_bound``` and ```right_foil_bound``` have to be calculated and entered manually as the ends of the foil are sometimes vague or subjective.
+The `filePath` depends on where you store the repository locally. The `left_foil_bound` and `right_foil_bound` have to be calculated and entered manually as the ends of the foil are sometimes vague or subjective.
 
 <figure>
 <img
@@ -33,7 +43,7 @@ The ```filePath``` depends on where you store the repository locally. The ```lef
   style="display: block; 
           margin-left: auto;
           margin-right: auto;
-          width: 45%;">
+          width: 400px;">
 <figcaption align = "center"><b>Naming convention of foil data files</b></figcaption>
 </figure>
 
@@ -45,14 +55,14 @@ Various metrics such as dimensions, material, and surface roughness can be found
 
 The algorithm tries to find the least warped section of the foil. It looks only at the middle third of the foil (marked with blue vertical lines in the diagram) whose bounds are calculated from the user-supplied end locations of the foil.
 
-The algorithm's output is the location of the centre of a certain section of the foil that ```n``` data columns wide (```approx_beam_width_um``` microns wide).
+The algorithm's output is the location of the centre of a certain section of the foil that `n` data columns wide (`approx_beam_width_um` microns wide).
 
 This 'certain section' of foil was chosen as it either maximises or minimises the chosen _warp indicator(s)_, measured for each data column (or array slice) in the section and averaged.
 
 ### Simple Warp Indicators
 
 The 'warp indicator' could be either:
- - the gradient of the best fit line in the ```y```-axis
+ - the gradient of the best fit line in the `y`-axis
  - the range (max - min) of the array slice's values
 
 ### Complex Warp Indicator
@@ -61,7 +71,7 @@ Recently, it was observed that the angle of the target wheel is able to be adjus
 
 This relative flatness can be approximated by the coefficient of determination ($R^2$ value) of the array slice's best fit line.
 
-The only issue with this approach is that the algorithm will not take into account any flat twist (like any section of a Möbius strip). If the approx beam width is not thin, (```n > 1```) this flat twist will be problematic and should be minimised.
+The only issue with this approach is that the algorithm will not take into account any flat twist (like any section of a Möbius strip). If the approx beam width is not thin, (`n > 1`) this flat twist will be problematic and should be minimised.
 
 An indicator of the flat twist of the foil in a certain section is the standard deviation or variance of the array slices in that section.
 
@@ -73,9 +83,9 @@ The ___dev___ branch contains an implementation of the relative flatness _warp i
 
 A bug involving scaling problems for height data between Vision64 and MATLAB has recently been fixed. Originally, the height data MATLAB loaded from the .OPD files was both differently scaled and vertically translated. This issue has been fixed so the data is now correctly scaled automatically. _The vertical scale in MATLAB is in microns_.
 
-| ![Vision64](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20Vision64%20scan%20example.png?raw=true)| ![MATLAB](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20MATLAB%20example.png?raw=true)|
-|-----|--------|
-|Vision64 scan |MATLAB surface|
+| ![Vision64](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20Vision64%20scan%20example.png?raw=true) | ![MATLAB](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/1C3%20MATLAB%20example.png?raw=true) |
+|-|-|
+| Vision64 scan | MATLAB surface|
 
 ## Contributing
 
