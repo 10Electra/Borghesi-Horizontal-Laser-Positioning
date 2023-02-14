@@ -8,4 +8,4 @@ reference_bounds = [971,3416];
 % Defines the search width
 beam_width_um = 10;
 
-LeastWarpedSection(filePath,fileName,reference_bounds,beam_width_um);
+Utils.LeastWarpedSection(filePath,fileName,reference_bounds,beam_width_um);

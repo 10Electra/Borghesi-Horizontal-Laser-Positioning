@@ -3,7 +3,7 @@ function [result_offset,section_angle,heightBounds] = LeastWarpedSection(filePat
 %   Detailed explanation goes here
 %% Reads the .OPD file and correctly scales it if necessary
 fullPath = strcat(filePath,fileName);
-[array,~,~,pxlsize] = ReadOPD(fullPath);
+[array,~,~,pxlsize] = Utils.ReadOPD(fullPath);
 heightBounds = [min(min(array)),max(max(array))];
 
 clear filePath fullPath
@@ -21,7 +21,7 @@ m = zeros(total_search_width_px,1); % Gradient array
 r2 = zeros(total_search_width_px,1); % Coefficients of determination array
 for i=1:total_search_width_px
     j = i-1 + left_third_bound;
-    [p, R2] = FitSlice(array,j);
+    [p, R2] = Utils.FitSlice(array,j);
     r2(i) = R2;
     m(i) = p(1);
 end
@@ -55,10 +55,8 @@ section_angle = rad2deg(atan(avg_m_section));
 clear i j k total avg total_search_width_px av_m m p R2
 
 %% Plot to check whether the foil is twisted at the chosen section
-% PlotSlices(array,best_j+1,best_j+beam_width_px)
-% PlotSlices3D(array,beam_width_px,left_third_bound,right_third_bound-beam_width_px)
-
-% NormalisedPlot(array,pxlsize)
+% Utils.PlotSlices(array,best_j+1,best_j+beam_width_px)
+% Utils.PlotSlices3D(array,beam_width_px,left_third_bound,right_third_bound-beam_width_px)
 
 %% Text outputs to command window
 sprintf(['The %0.1f um wide least warped section is %0.2f microns' ...
@@ -73,6 +71,6 @@ sprintf(['The average gradient of the foil in the chosen' ...
 
 %% Plotting
 search_bounds = [left_third_bound*pxlsize,right_third_bound*pxlsize];
-FinalPlot(array,pxlsize,result,beam_width_um,search_bounds,reference_bounds*pxlsize,fileName)
+Utils.FinalPlot(array,pxlsize,result,beam_width_um,search_bounds,reference_bounds*pxlsize,fileName)
 end
 
