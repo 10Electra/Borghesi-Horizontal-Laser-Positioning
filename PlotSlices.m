@@ -26,7 +26,7 @@ for xi=sliceStart:sliceEnd
     x(isnan(y)) = NaN;
     x = rmmissing(x);
     y = rmmissing(y);
-    plot(x,y)
+    scatter(x,y)
     hold on
     plot(x,polyval(p,x))
     title([p(1),R2])
