@@ -1,7 +1,16 @@
 # Borghesi-Horizontal-Laser-Positioning
 A MATLAB project to assist the Borghesi-1022 experiment by finding the least warped section of each foil in each Borghesi microtarget array.
 
-The foils are individually scanned using a white light interferometer normal to the foil. The foil's height map is then saved in the .OPD file format and uploaded to the ___Characterisation Data___ directory of this repository. The file's name, path and approximate foil position can be given to the _main.m_ script, which then uses an algorithm (explained below) to determine the least warped section. A plot of the foil's 3D surface that includes the relevant result annotations can be shown.
+<figure>
+<img
+  src="https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Latest%20example%20plot%20cropped%20wsubtitle.png?raw=true"
+  style="display: block; 
+          margin-left: auto;
+          margin-right: auto;">
+<figcaption align = "center"><b>Example result plot</b></figcaption>
+</figure>
+
+The foils are individually scanned using a white light interferometer normal to the surface of the foil. The resulting height map is then saved in the .OPD file format and uploaded to the ___Characterisation Data___ directory of this repository. Information about the foil such as its corresponding data file's name is given by the user to the _main.m_ script, which then uses an algorithm (explained below) to determine location of its least warped section. A plot of the foil's 3D surface that includes the relevant result annotations can then be plotted.
 
 ## Installation
 
@@ -28,13 +37,12 @@ or
 - Edit the following variables to fit the current data
   - `filePath`
   - `fileName`
-  - `left_foil_bound`, the location of the left edge of the foil (in data rows) on the x-axis
-  - `right_foil_bound`, the location of the right edge of the foil (in data rows) on the x-axis
+  - `reference_bounds`, the *x* locations (in data rows) of the inner left and right edges of the L-shaped foil mount
   - `approx_beam_width_um`
 
-In the __Finding the least warped section of the foil__ section (around line 65), you can replace the _warp indicator_ `r(i+k)` with another of your choice. The _warp indicator_ array that is indexed here is calculated earlier in the script (around line 46).
+The `filePath` should not depend on where you store the repository - it should be a local path, e.g. `'Characterisation Data\Array3\'`. The `reference_bounds` have to be found and entered manually as these positions change between scans and can be subjective. It is recommended to run `main.m` with arbitrary `reference_bounds` values and use the 3D plot to determine them before restarting the script.
 
-The `filePath` depends on where you store the repository locally. The `left_foil_bound` and `right_foil_bound` have to be calculated and entered manually as the ends of the foil are sometimes vague or subjective.
+The image below shows the naming convention used for filenames in the ___Array Target Characterisation.xlsx___ spreadsheet.
 
 <figure>
 <img
@@ -48,24 +56,27 @@ The `filePath` depends on where you store the repository locally. The `left_foil
 </figure>
 
 
-Various metrics such as dimensions, material, and surface roughness can be found in the ___Array Target Characterisation.xlsx___ spreadsheet. Each row corresponds to a different target.
+Various metrics such as dimensions, material, and surface roughness can also be found in  ___Array Target Characterisation.xlsx___. Each row corresponds to a different target.
 
 ## A More Detailed Explanation
-![3D Graph Example](https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Borghesi%20Example%203D%20Graph%20Annotated.png?raw=true)
 
-The algorithm tries to find the least warped section of the foil. It looks only at the middle third of the foil (marked with blue vertical lines in the diagram) whose bounds are calculated from the user-supplied end locations of the foil.
+The algorithm tries to find the least warped section of the foil. It looks only at the middle third of the section between the reference bounds. These 'middle third bounds' are displayed with blue dashed lines, and the reference bounds are shown in black.
 
-The algorithm's output is the location of the centre of a certain section of the foil that `n` data columns wide (`approx_beam_width_um` microns wide).
+<figure>
+<img
+  src="https://github.com/10Electra/Borghesi-Horizontal-Laser-Positioning/blob/main/images%20and%20examples/Annotated%20Example%20cropped.png?raw=true"
+  style="display: block; 
+          margin-left: 0px;
+          margin-right: 0px;">
+<figcaption align = "center"><b>Example Result Plot</b></figcaption>
+</figure>
 
-This 'certain section' of foil was chosen as it either maximises or minimises the chosen _warp indicator(s)_, measured for each data column (or array slice) in the section and averaged.
+The algorithm's output is the location of the centre of a certain section of the foil that is `beam_width_um` μm wide. The bounds of this section are marked with the red dotted lines. The `beam_width_um` is converted to a width of `n` data point readings.
 
-### Simple Warp Indicators
+This 'certain section' of foil was chosen as it either maximises or minimises the chosen _warp indicator(s)_, measured for each data column / array slice in the section and averaged.
 
-The 'warp indicator' could be either:
- - the gradient of the best fit line in the `y`-axis
- - the range (max - min) of the array slice's values
-
-### Complex Warp Indicator
+### Warp Indicators
+The _warp indicator_ now used on the `main` branch of this repository is described below.
 
 Recently, it was observed that the angle of the target wheel is able to be adjusted, so we can search for relative flatness, as opposed to absolute angle flatness (e.g. $\theta=0°$ or $m=0$).
 
@@ -75,9 +86,7 @@ The only issue with this approach is that the algorithm will not take into accou
 
 An indicator of the flat twist of the foil in a certain section is the standard deviation or variance of the array slices in that section.
 
-The relative flatness and flat twist indicators can be combined in a weighted sum to form a new warp indicator.
-
-The ___dev___ branch contains an implementation of the relative flatness _warp indicator_. Instead of using a flat twist indicator, the current implementation on ___dev___ plots a graph of all of the slices in the chosen least warped section so the user can check for flat twist.
+It was decided not to calculate this 'flat twist indicator' as finding the right weighted sum would have been difficult. Instead, only the coefficient of determination is used and the user is presented with a 3D surface plot or sequential 2D slice plots of the result section to check it for flat twist. These plots are made available with the included but commented _lines 58_ and _59_ in `[+Utils\]LeastWarpedSection.m`, which make use of the `PlotSlices` and `PlotSlices3D` functions.
 
 ## Bugfixes
 
