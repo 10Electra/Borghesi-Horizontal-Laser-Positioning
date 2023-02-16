@@ -5,6 +5,7 @@ function [result_offset,section_angle,heightBounds] = LeastWarpedSection(filePat
 fullPath = strcat(filePath,fileName);
 [array,~,~,pxlsize] = Utils.ReadOPD(fullPath);
 heightBounds = [min(min(array)),max(max(array))];
+reference_bounds = reference_bounds / pxlsize;
 
 clear filePath fullPath
 
