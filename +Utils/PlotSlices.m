@@ -1,4 +1,4 @@
-function PlotSlices(array,sliceStart,sliceEnd)
+function PlotSlices(array,sliceStart,sliceEnd,name)
 %PLOTSLICES Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -20,7 +20,7 @@ ylims(2) = ylims(2)*(1+lim_margin);
 
 % Do the plotting
 for xi=sliceStart:sliceEnd
-    [p, R2] = FitSlice(array,xi);
+    [p, R2] = Utils.FitSlice(array,xi);
     y = array(:,xi);
     x = linspace(1,height(array),height(array))';
     x(isnan(y)) = NaN;
@@ -29,7 +29,12 @@ for xi=sliceStart:sliceEnd
     scatter(x,y)
     hold on
     plot(x,polyval(p,x))
-    title([p(1),R2])
+    if(~isnan(name))
+        title(sprintf('Array Target %s at x = %d px',name,xi))
+    else
+        title(sprintf('Array Target at x = %d px',xi))
+    end
+    subtitle(sprintf('m = %0.4f, R^2 = %0.4f',p(1),R2))
     xlim(xlims)
     ylim(ylims)
     waitforbuttonpress
