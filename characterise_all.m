@@ -23,4 +23,5 @@ for folderid=1:length(folderlist)
         end
     end
 end
-writetable(struct2table(targetData), 'targetData.xlsx')
+% writetable(struct2table(targetData), 'targetData.xlsx')
+% save targetData.mat targetData

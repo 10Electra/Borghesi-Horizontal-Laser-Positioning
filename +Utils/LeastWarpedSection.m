@@ -87,6 +87,6 @@ else
         Utils.FinalPlot(array,pxlsize,result,beam_width_um,search_bounds,reference_bounds*pxlsize,fileName)
     end
 end
-% Utils.PlotSlices(array,left_third_bound,right_third_bound,fileName(1:3))
+Utils.PlotSlices(array,left_third_bound,right_third_bound,fileName(1:3))
 end
 
